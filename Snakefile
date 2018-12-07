@@ -68,7 +68,7 @@ rule download_additional_features:
 
 rule download_counts_brca:
     params:
-        url: 'https://obj.umiacs.umd.edu/mutation-signature-explorer/publications/Davies2017/processed/counts/counts.ICGC-BRCA-EU_BRCA_22.SBS-96.tsv'
+        url='https://obj.umiacs.umd.edu/mutation-signature-explorer/publications/Davies2017/processed/counts/counts.ICGC-BRCA-EU_BRCA_22.SBS-96.tsv'
     output:
         COUNTS_BRCA_FILE
     shell:
@@ -76,7 +76,7 @@ rule download_counts_brca:
 
 rule download_sample_key:
     params:
-        url: 'https://obj.umiacs.umd.edu/mutation-signature-explorer/publications/Davies2017/processed/samples/samples.ICGC-BRCA-EU_BRCA_22.tsv'
+        url='https://obj.umiacs.umd.edu/mutation-signature-explorer/publications/Davies2017/processed/samples/samples.ICGC-BRCA-EU_BRCA_22.tsv'
     output:
         SAMPLE_KEY_FILE
     shell:
@@ -84,7 +84,7 @@ rule download_sample_key:
 
 rule download_raw_counts:
     params:
-        url: 'https://obj.umiacs.umd.edu/mutation-signature-explorer/publications/Nik-Zainal2016/processed/sv_counts/counts.ICGC-BRCA-EU_BRCA_22.Letouze2017.tsv'
+        url='https://obj.umiacs.umd.edu/mutation-signature-explorer/publications/Nik-Zainal2016/processed/sv_counts/counts.ICGC-BRCA-EU_BRCA_22.Letouze2017.tsv'
     output:
         RAW_COUNTS_FILE
     shell:
