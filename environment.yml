@@ -11,6 +11,6 @@ dependencies:
   - r-tidyverse
   - r-glmnet
   - r-proc
-  - r-randomorest
+  - r-randomforest
   - r-caret
   - r>=3.4
