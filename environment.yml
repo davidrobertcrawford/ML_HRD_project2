@@ -1,0 +1,16 @@
+name: project-2-env
+channels:
+  - bioconda
+  - r
+dependencies:
+  #- python>=3.6
+  #- anaconda
+  - snakemake
+  - r-gridextra
+  - r-data.table
+  - r-tidyverse
+  - r-glmnet
+  - r-proc
+  - r-randomorest
+  - r-caret
+  - r>=3.4
