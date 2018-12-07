@@ -19,7 +19,7 @@ library(data.table)
 
 
 # Set number of runs for run3ML
-num_runs = 20
+num_runs = 4
 
 
 
