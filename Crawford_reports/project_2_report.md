@@ -89,9 +89,9 @@ __predict__
 
 We set type to "prob" to return classification probabilities we can use for AUROC calculations.
 
-| Parameter                        | Setting           | Source            |
-| -------------------------------- | ----------------- | ----------------- |
-|  type                            |  "prob"           |   source          |
+| Parameter                        | Setting           |
+| -------------------------------- | ----------------- | 
+|  type                            |  "prob"           |   
 
 
 ##### Random Forests (RF)
