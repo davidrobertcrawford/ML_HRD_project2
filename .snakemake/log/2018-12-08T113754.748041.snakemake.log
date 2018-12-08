@@ -1,0 +1,31 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	plot_ROCs
+	2
+
+[Sat Dec  8 11:37:54 2018]
+rule plot_ROCs:
+    input: data/additional_features.ICGC-BRCA-EU_BRCA_Davies2017.tsv, data/counts.ICGC-BRCA-EU_BRCA_22.SBS-96.tsv, data/samples.ICGC-BRCA-EU_BRCA_22.tsv, data/counts.ICGC-BRCA-EU_BRCA_22.Letouze2017.tsv
+    output: output/plot_1.jpg, output/plot_2.jpg, output/plot_3.jpg, output/plot_4.jpg, output/table_1.jpg, output/table_2.jpg
+    jobid: 5
+
+[Sat Dec  8 11:41:03 2018]
+Error in rule plot_ROCs:
+    jobid: 5
+    output: output/plot_1.jpg, output/plot_2.jpg, output/plot_3.jpg, output/plot_4.jpg, output/table_1.jpg, output/table_2.jpg
+
+RuleException:
+CalledProcessError in line 61 of /Users/david/Documents/test7/ML_HRD_project2/Snakefile:
+Command ' set -euo pipefail;  Rscript src/main_code.R data/additional_features.ICGC-BRCA-EU_BRCA_Davies2017.tsv data/counts.ICGC-BRCA-EU_BRCA_22.SBS-96.tsv data/samples.ICGC-BRCA-EU_BRCA_22.tsv data/counts.ICGC-BRCA-EU_BRCA_22.Letouze2017.tsv output/plot_1.jpg output/plot_2.jpg output/plot_3.jpg output/plot_4.jpg output/table_1.jpg output/table_2.jpg ' returned non-zero exit status 1.
+  File "/Users/david/Documents/test7/ML_HRD_project2/Snakefile", line 61, in __rule_plot_ROCs
+  File "/anaconda3/envs/test9/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Removing output files of failed job plot_ROCs since they might be corrupted:
+output/plot_1.jpg, output/plot_2.jpg, output/plot_3.jpg, output/plot_4.jpg
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/david/Documents/test7/ML_HRD_project2/.snakemake/log/2018-12-08T113754.748041.snakemake.log

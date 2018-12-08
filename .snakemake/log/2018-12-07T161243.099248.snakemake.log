@@ -1,0 +1,16 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	plot_ROCs
+	2
+
+[Fri Dec  7 16:12:43 2018]
+rule plot_ROCs:
+    input: data/additional_features.ICGC-BRCA-EU_BRCA_Davies2017.tsv, data/counts.ICGC-BRCA-EU_BRCA_22.SBS-96.tsv, data/samples.ICGC-BRCA-EU_BRCA_22.tsv, data/counts.ICGC-BRCA-EU_BRCA_22.Letouze2017.tsv
+    output: output/plot_1.jpg, output/plot_2.jpg, output/plot_3.jpg, output/plot_4.jpg, output/table_1.jpg, output/table_2.jpg
+    jobid: 2
+

@@ -1,0 +1,31 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	download_counts_brca
+	1	download_raw_counts
+	1	download_sample_key
+	1	plot_ROCs
+	5
+
+[Fri Dec  7 16:01:05 2018]
+rule download_sample_key:
+    output: data/samples.ICGC-BRCA-EU_BRCA_22.tsv
+    jobid: 5
+
+[Fri Dec  7 16:01:05 2018]
+Error in rule download_sample_key:
+    jobid: 5
+    output: data/samples.ICGC-BRCA-EU_BRCA_22.tsv
+
+RuleException:
+CalledProcessError in line 87 of /Users/david/Documents/test7/ML_HRD_project2/Snakefile:
+Command ' set -euo pipefail;  wget -0 data/samples.ICGC-BRCA-EU_BRCA_22.tsv https://obj.umiacs.umd.edu/mutation-signature-explorer/publications/Davies2017/processed/samples/samples.ICGC-BRCA-EU_BRCA_22.tsv ' returned non-zero exit status 2.
+  File "/Users/david/Documents/test7/ML_HRD_project2/Snakefile", line 87, in __rule_download_sample_key
+  File "/anaconda3/envs/test7/lib/python3.6/concurrent/futures/thread.py", line 56, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/david/Documents/test7/ML_HRD_project2/.snakemake/log/2018-12-07T160104.996502.snakemake.log

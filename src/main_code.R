@@ -9,17 +9,18 @@
 rm(list=ls())
 gc()
 
+library(stringr)
 library(caret)
 library(glmnet)
 library(pROC)
 library(randomForest)
-library(tidyverse)
+library(ggplot2)
 library(gridExtra)
 library(data.table)
 
 
 # Set number of runs for run3ML
-num_runs = 4
+num_runs = 20
 
 
 
@@ -65,40 +66,40 @@ norm_col = function(the_vector){
 
 # Harmonize sample ids ----------------------------------------------------
 
-length(unique(sample_key$Patient))
-length(unique(sample_key$Sample))
-length(unique(sample_key$`Alternative Sample Name`))
+#length(unique(sample_key$Patient))
+#length(unique(sample_key$Sample))
+#length(unique(sample_key$`Alternative Sample Name`))
 
-colnames(sample_key)
+#colnames(sample_key)
 setnames(sample_key, "Sample", "Sample_id_1")
 setnames(sample_key, "Alternative Sample Name", "Sample_id_2")
 
-colnames(add_feat)
+#colnames(add_feat)
 setnames(add_feat, "Sample", "Sample_id_2")
 
-colnames(counts_brca)
+#colnames(counts_brca)
 setnames(counts_brca, "V1", "Sample_id_1")
 
-colnames(clin_feat)
-setnames(clin_feat, "Sample", "Sample_id_2")
+#colnames(clin_feat)
+#setnames(clin_feat, "Sample", "Sample_id_2")
 
-colnames(raw_counts)
+#colnames(raw_counts)
 setnames(raw_counts, "Sample", "Sample_id_1")
 
 
 
 # Check for data completeness ---------------------------------------------
 
-sum(is.na(add_feat))
-sum(is.na(clin_feat))
-sum(is.na(counts_brca))
-sum(is.na(raw_counts))
+#sum(is.na(add_feat))
+#sum(is.na(clin_feat))
+#sum(is.na(counts_brca))
+#sum(is.na(raw_counts))
 
-summary(add_feat)
+#summary(add_feat)
 
 #Remove rows w/ NA
 add_feat = add_feat[!(is.na(hrd))]
-sum(is.na(add_feat))
+#sum(is.na(add_feat))
 
 
 # Set uniform ids & set status column -------------------------------------
@@ -194,29 +195,6 @@ prepare_tt = function(cases){
     
     return(sample_round_data)
 }
-    
-#To test prepare_tt
-test_function = FALSE
-
-if(test_function){
-    tester_fish=prepare_tt(cases)
-    test_holdout = tester_fish[isHoldout==TRUE]
-    test_tt = tester_fish[isHoldout==FALSE]
-    
-    test_holdout_false = length(test_holdout[isQuiescentGenomeControl==FALSE, 
-                                             Sample_id_1])
-    
-    test_holdout_true = length(test_holdout[isQuiescentGenomeControl==TRUE, 
-                                            Sample_id_1])
-    
-    test_tt_false = length(test_tt[isQuiescentGenomeControl==FALSE, 
-                                   Sample_id_1])
-    
-    test_tt_true = length(test_tt[isQuiescentGenomeControl==TRUE, 
-                                  Sample_id_1])
-}
-
-
 
 
 
@@ -532,7 +510,7 @@ auc_ft = round(c(mean(auc_dt_ft$AUC_RF),
 
 
 
-rank_dt = data.table(Model = c("RF", "SVM", "GLM"),
+rank_table = data.table(Model = c("RF", "SVM", "GLM"),
                      All = rank_all,
                      Raw = rank_raw,
                      Proc = rank_proc,
@@ -542,7 +520,7 @@ rank_dt = data.table(Model = c("RF", "SVM", "GLM"),
                      Log_Norm_FT = rank_ft,
                      Log_Norm_FF = rank_ff)
 
-auc_dt = data.table(Model = c("RF", "SVM", "GLM"),
+auc_table = data.table(Model = c("RF", "SVM", "GLM"),
                      All = auc_all,
                      Raw = auc_raw,
                      Proc = auc_proc,
@@ -558,19 +536,35 @@ auc_cols = colnames(auc_dt)
 
 auc_auc = auc_dt[,.SD,.SDcols=auc_cols[1:7]]
 
-auc_melt = melt(auc_auc, id.vars=c("Set_num", "Raw_or_proc", 
-                                   "Normalize", "Log_transform"))
+auc_melt = melt(auc_auc, id.vars=auc_cols[1:4])
+
 setnames(auc_melt, "variable", "ML_method")
 setnames(auc_melt, "value", "AUC")
 
-auc_rank = auc_dt[,.SD,.SDcols=c(auc_cols[1:4], auc_cols[8:10])]
-rank_melt = melt(auc_rank, id.vars=c("Set_num", "Raw_or_proc", 
-                                     "Normalize", "Log_transform"))
+the_cols = c(auc_cols[1:4], auc_cols[8:10])
+
+auc_rank = data.table(auc_dt)
+auc_rank[,AUC_glm:=NULL]
+auc_rank[,AUC_RF:=NULL]
+auc_rank[,AUC_svm:=NULL]
+
+#auc_rank = auc_dt[,.SD,.SDcols=the_cols]
+rank_melt = melt(auc_rank, id.vars=c("Raw_or_proc", "Log_transform", 
+                                     "Normalize", "Set_num"))
 setnames(rank_melt, "variable", "ML_method")
 setnames(rank_melt, "value", "Rank")
+rank_melt[,Rank:=as.integer(Rank)]
+#rank_melt[,Raw_or_proc:=as.factor("Raw_or_proc")]
+#rank_melt[,Log_transform:=as.factor("Log_transform")]
+#rank_melt[,Normalize:=as.factor("Normalize")]
+#rank_melt[,ML_method:=as.factor("ML_method")]
 
-colnames(auc_melt)
+#colnames(auc_melt)
 
+#auc_melt[,Raw_or_proc:=as.factor("Raw_or_proc")]
+#auc_melt[,Log_transform:=as.factor("Log_transform")]
+#auc_melt[,Normalize:=as.factor("Normalize")]
+#auc_melt[,ML_method:=as.factor("ML_method")]
 
 plot_1 = ggplot(data=auc_melt)+
     geom_violin(aes(x=ML_method, y=AUC, color=ML_method, fill=ML_method))+
@@ -583,7 +577,7 @@ plot_2 = ggplot(data=auc_melt)+
     theme_bw()+
     ggtitle("AUC by Machine Learning Method & Feature Set (both, proc, raw)")+
     theme(plot.title = element_text(hjust=.5))+
-    facet_grid(.~Raw_or_proc)
+    facet_grid(.~Raw_or_proc) #facet_wrap(~Raw_or_proc, ncol=3)#
 
 plot_3 = ggplot(data=auc_melt)+
     geom_violin(aes(x=ML_method, y=AUC, color=ML_method, fill=ML_method))+
@@ -593,7 +587,7 @@ plot_3 = ggplot(data=auc_melt)+
     facet_grid(.~Log_transform+Normalize)
 
 
-rank_melt[,Rank:=as.integer(Rank)]
+
 
 plot_4 = ggplot(data=rank_melt)+
     geom_histogram(aes(x=Rank, color=ML_method, fill=ML_method), bins=3)+
@@ -601,7 +595,7 @@ plot_4 = ggplot(data=rank_melt)+
     ggtitle("Rank by Machine Learning Method & Feature Set (both, proc, raw)")+
     theme(plot.title = element_text(hjust=.5),
           legend.position="none")+
-    facet_grid(Raw_or_proc~ML_method)
+    facet_grid(Raw_or_proc~ML_method) # 
 
 
 jpeg(filename=args[5], width=600, height=400, units="px", 
@@ -636,11 +630,11 @@ dev.off()
 
 jpeg(filename=args[9], width=600, height=400, units="px", 
      pointsize=36, quality=100)
-grid.table(auc_dt)
+grid.table(auc_table)
 dev.off()
 
 
 jpeg(filename=args[10], width=600, height=400, units="px", 
      pointsize=36, quality=100)
-grid.table(rank_dt)
+grid.table(rank_table)
 dev.off()

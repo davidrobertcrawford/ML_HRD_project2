@@ -1,0 +1,28 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	download_additional_features
+	2
+
+[Fri Dec  7 15:58:45 2018]
+rule download_additional_features:
+    output: data/additional_features.ICGC-BRCA-EU_BRCA_Davies2017.tsv
+    jobid: 1
+
+[Fri Dec  7 15:58:47 2018]
+Finished job 1.
+1 of 2 steps (50%) done
+
+[Fri Dec  7 15:58:47 2018]
+localrule all:
+    input: data/additional_features.ICGC-BRCA-EU_BRCA_Davies2017.tsv
+    jobid: 0
+
+[Fri Dec  7 15:58:47 2018]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /Users/david/Documents/test7/ML_HRD_project2/.snakemake/log/2018-12-07T155845.949089.snakemake.log

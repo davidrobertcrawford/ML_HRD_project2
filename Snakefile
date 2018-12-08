@@ -35,7 +35,11 @@ MAINCODE = join(SRC_DIR, 'main_code.R')
 ################################################################################
 rule all:
     input:
-        ADDITIONAL_FEATURES_FILE
+        ADDITIONAL_FEATURES_FILE,
+        COUNTS_BRCA_FILE,
+        SAMPLE_KEY_FILE,
+        RAW_COUNTS_FILE,
+        PLOT_1
     #conda:
     #    "environment.yml"
 
@@ -54,7 +58,7 @@ rule plot_ROCs:
         TABLE_1,
         TABLE_2
     shell:
-        'Rscript {MAINCODE} {input[0]} {input[1]} {input[2]} {input[3]} {input[4]} {output[0]} {output[1]} {output[2]} {output[3]} {output[4]} {output[5]}'
+        'Rscript {MAINCODE} {input[0]} {input[1]} {input[2]} {input[3]} {output[0]} {output[1]} {output[2]} {output[3]} {output[4]} {output[5]}'
 
 
 
@@ -72,7 +76,7 @@ rule download_counts_brca:
     output:
         COUNTS_BRCA_FILE
     shell:
-        'wget -0 {output} {params.url}'
+        'wget -O {output} {params.url}'
 
 rule download_sample_key:
     params:
@@ -80,7 +84,7 @@ rule download_sample_key:
     output:
         SAMPLE_KEY_FILE
     shell:
-        'wget -0 {output} {params.url}'
+        'wget -O {output} {params.url}'
 
 rule download_raw_counts:
     params:
@@ -88,4 +92,4 @@ rule download_raw_counts:
     output:
         RAW_COUNTS_FILE
     shell:
-        'wget -0 {output} {params.url}'
+        'wget -O {output} {params.url}'
